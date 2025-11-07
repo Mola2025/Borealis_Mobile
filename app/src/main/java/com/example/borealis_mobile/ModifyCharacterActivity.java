@@ -1,0 +1,22 @@
+package com.example.borealis_mobile;
+
+import android.os.Bundle;
+
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+public class ModifyCharacterActivity extends AppCompatActivity {
+
+    // Es para crear y modificar el personaje con los items comprados
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_modify_character);
+
+    }
+}

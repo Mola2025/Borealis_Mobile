@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "14016593775",
+    "project_id": "borealismobile",
+    "storage_bucket": "borealismobile.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:14016593775:android:0210028c10ce23bc2b729a",
+        "android_client_info": {
+          "package_name": "com.example.borealis_mobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDz5assLlmDK5Rc-F8IJJmO8zdXHBTwGYE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

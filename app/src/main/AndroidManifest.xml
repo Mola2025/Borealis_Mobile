@@ -48,6 +48,9 @@
             android:name=".MainActivity"
             android:exported="false" />
         <activity
+            android:name=".AdminHomePageActivity"
+            android:exported="false" />
+        <activity
             android:name=".SplashScreen"
             android:exported="true">
             <intent-filter>

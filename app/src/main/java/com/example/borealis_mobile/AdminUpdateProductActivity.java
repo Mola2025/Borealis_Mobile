@@ -127,8 +127,12 @@ public class AdminUpdateProductActivity extends AppCompatActivity {
         Item updatedProduct = new Item(productId, name, description, price, imageUrl);
 
         databaseProduct.child(productId).setValue(updatedProduct)
-                .addOnSuccessListener(aVoid ->
-                        Toast.makeText(this, "Product updated!", Toast.LENGTH_SHORT).show())
+                .addOnSuccessListener(aVoid -> {
+                        Toast.makeText(this, "Product updated!", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(this, AdminHomePageActivity.class);
+                        startActivity(intent);
+                        finish();
+                })
                 .addOnFailureListener(e ->
                         Toast.makeText(this, "Update failed", Toast.LENGTH_SHORT).show());
     }

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Borealis_Mobile</string>
+    <string name="navigation_drawer_open">Open Menu</string>
+    <string name="navigation_drawer_close">Close Menu</string>
 </resources>

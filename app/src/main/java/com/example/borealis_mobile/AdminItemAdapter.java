@@ -82,22 +82,31 @@ public class AdminItemAdapter extends BaseAdapter {
         }
 
         // Spinner
-        String[] actions = {"Update", "Delete"};
+        String[] actions = {"Select Action","Update", "Delete"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, actions);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerActions.setAdapter(adapter);
 
-        // Reset
-        spinnerActions.setSelection(0);
+
 
         spinnerActions.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            private boolean selectoption = true;
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                if (selectoption){
+                    selectoption = false;
+                    return;
+                }
+
                 String action = parent.getItemAtPosition(position).toString();
+
                 if (action.equals("Update")){
                     UpdateProduct(product);
+                    spinnerActions.setSelection(0);
                 }else if (action.equals("Delete")){
-                    databaseProduct.child(product.getId()).removeValue();
+                    DeleteProduct(product);
+                    spinnerActions.setSelection(0);
                 }
             }
 

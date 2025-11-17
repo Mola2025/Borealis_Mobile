@@ -6,9 +6,6 @@ import android.widget.ListView;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -19,12 +16,13 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdminUserListActivity extends AppCompatActivity {
-    private ListView listViewUsers;
+public class AdminBlockedUsersList extends AppCompatActivity {
+
+    private ListView listViewBlockedUsers;
     private AdminUserAdapter adapter;
-    private List<User> users;
-    private DatabaseReference usersRef;
+    private List<User> BlockedUsersList;
     private DatabaseReference blockedUsersRef;
+    private DatabaseReference usersRef;
 
 
 
@@ -32,28 +30,29 @@ public class AdminUserListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_admin_user_list);
+        setContentView(R.layout.activity_admin_blocked_users_list);
 
-        listViewUsers = findViewById(R.id.listViewUsers);
-        users = new ArrayList<>();
+        listViewBlockedUsers = findViewById(R.id.listViewBlockedUsers);
+        BlockedUsersList = new ArrayList<>();
 
-        usersRef = FirebaseDatabase.getInstance().getReference("users");
         blockedUsersRef = FirebaseDatabase.getInstance().getReference("blockedUsers");
+        usersRef = FirebaseDatabase.getInstance().getReference("users");
 
-        adapter = new AdminUserAdapter(this, users, usersRef, blockedUsersRef, false);
-        listViewUsers.setAdapter(adapter);
+        adapter = new AdminUserAdapter(this, BlockedUsersList, usersRef, blockedUsersRef, true);
+        listViewBlockedUsers.setAdapter(adapter);
 
-        loadAllUsers();
+        loadBlockedUsers();
+
     }
 
-    private void loadAllUsers(){
-        usersRef.addValueEventListener(new ValueEventListener() {
+    private void loadBlockedUsers(){
+        blockedUsersRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                users.clear();
+                BlockedUsersList.clear();
                 for (DataSnapshot userSnapshot : snapshot.getChildren()) {
                     User user = userSnapshot.getValue(User.class);
-                    users.add(user);
+                    BlockedUsersList.add(user);
                 }
                 adapter.notifyDataSetChanged();
             }

@@ -16,9 +16,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -32,10 +29,10 @@ import java.util.ArrayList;
 public class AdminItemAdapter extends BaseAdapter {
 
     private Context context;
-    private ArrayList<Item> productList;
+    private ArrayList<ShopItem> productList;
     private DatabaseReference databaseProduct;
 
-    public AdminItemAdapter(Context c, ArrayList<Item> list) {
+    public AdminItemAdapter(Context c, ArrayList<ShopItem> list) {
         context = c;
         productList = list;
         databaseProduct = FirebaseDatabase.getInstance().getReference("products");
@@ -62,23 +59,32 @@ public class AdminItemAdapter extends BaseAdapter {
         if (view == null){
             view = LayoutInflater.from(context).inflate(R.layout.admin_item_card,parent,false);
         }
-        Item product = productList.get(position);
+        ShopItem product = productList.get(position);
 
-        ImageView imageView = view.findViewById(R.id.imageViewItem);
-        TextView nameText = view.findViewById(R.id.tvItemName);
-        TextView descriptionText = view.findViewById(R.id.tvItemDescription);
+        ImageView imageView = view.findViewById(R.id.profileImage);
+        TextView nameText = view.findViewById(R.id.tvUsername);
+        TextView descriptionText = view.findViewById(R.id.tvUserEmail);
         TextView priceText = view.findViewById(R.id.tvItemPrice);
+        ImageView imageButtonPremium = view.findViewById(R.id.imageButtonPremium);
         Spinner spinnerActions = view.findViewById(R.id.spinnerActions);
 
 
-        nameText.setText(product.getName());
-        descriptionText.setText(product.getDescription());
+        nameText.setText(product.getBaseElement().getName());
+        descriptionText.setText(product.getBaseElement().getDescription());
         priceText.setText("$ " + product.getPrice());
 
         if (product.getImageURL() !=null && !product.getImageURL().isEmpty()){
             new ImageLoadTask(product.getImageURL(),imageView).execute();
         }else {
             imageView.setImageResource(android.R.drawable.ic_menu_report_image);
+        }
+
+        // Premium Item
+
+        if (product.isPremium()){
+            imageButtonPremium.setVisibility(View.VISIBLE);
+        }else {
+            imageButtonPremium.setVisibility(View.GONE);
         }
 
         // Spinner
@@ -149,17 +155,18 @@ public class AdminItemAdapter extends BaseAdapter {
         }
     }
 
-    private void UpdateProduct(Item product){
+    private void UpdateProduct(ShopItem product){
         Intent intent = new Intent(context, AdminUpdateProductActivity.class);
         intent.putExtra("productID", product.getId());
-        intent.putExtra("productName", product.getName());
-        intent.putExtra("productDesc", product.getDescription());
+        intent.putExtra("productName", product.getBaseElement().getName());
+        intent.putExtra("productDesc", product.getBaseElement().getDescription());
         intent.putExtra("productPrice", product.getPrice());
         intent.putExtra("productImageURL", product.getImageURL());
+        intent.putExtra("productPremium", product.isPremium());
         context.startActivity(intent);
     }
 
-    private void DeleteProduct(Item product){
+    private void DeleteProduct(ShopItem product){
         if (product.getImageURL() != null && !product.getImageURL().isEmpty()){
             StorageReference imageRef = FirebaseStorage.getInstance().getReferenceFromUrl(product.getImageURL());
             imageRef.delete().addOnSuccessListener(aVoid -> {

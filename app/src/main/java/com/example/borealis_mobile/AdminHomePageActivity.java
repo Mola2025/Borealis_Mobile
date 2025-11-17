@@ -34,7 +34,7 @@ public class AdminHomePageActivity extends AppCompatActivity {
     // Firebase
     DatabaseReference databaseProduct;
     ListView listViewProduct;
-    ArrayList<Item> productList;
+    ArrayList<ShopItem> productList;
     AdminItemAdapter adapter;
 
     @Override
@@ -60,7 +60,7 @@ public class AdminHomePageActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 productList.clear();
                 for (DataSnapshot possnapshot : snapshot.getChildren()) {
-                    Item product = possnapshot.getValue(Item.class);
+                    ShopItem product = possnapshot.getValue(ShopItem.class);
                     if (product != null) {
                         productList.add(product);
                     }
@@ -82,18 +82,15 @@ public class AdminHomePageActivity extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(item -> {
             int id = item.getItemId();
 
-            if (id == R.id.nav_settings) {
-//                    Intent intent = new Intent(this, AdminSettingsActivity.class);
-//                    startActivity(intent);
-            } else if (id == R.id.nav_users_list) {
-//                    Intent intent2 = new Intent(this, AdminUsersListActivity.class);
-//                    startActivity(intent2);
+            if (id == R.id.nav_users_list) {
+                    Intent intent2 = new Intent(this, AdminUserListActivity.class);
+                    startActivity(intent2);
             } else if (id == R.id.nav_order_history) {
-//                    Intent intent3 = new Intent(this, AdminOrderHistoryActivity.class);
-//                    startActivity(intent3);
+                    Intent intent3 = new Intent(this, OrderHistoryActivity.class);
+                    startActivity(intent3);
             } else if (id == R.id.nav_blocked_users) {
-//                    Intent intent4 = new Intent(this, AdminBlockUsersActivity.class);
-//                    startActivity(intent4);
+                    Intent intent4 = new Intent(this, AdminBlockedUsersList.class);
+                    startActivity(intent4);
             } else if (id == R.id.nav_logout) {
                 FirebaseAuth.getInstance().signOut();
                 Intent intent5 = new Intent(this, AuthActivity.class);

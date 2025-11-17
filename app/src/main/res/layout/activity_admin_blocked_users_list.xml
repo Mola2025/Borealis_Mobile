@@ -6,25 +6,24 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AdminUserListActivity"
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/tvUserList"
+        android:id="@+id/tvBlockedUsers"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="User List"
+        android:text="Blocked Users"
         android:textSize="40dp"
         android:textStyle="bold"
         android:layout_marginTop="30dp"
         android:gravity="center"
-        android:textColor="@color/green"
+        android:textColor="@color/red"
         android:background="@color/black"/>
 
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/listViewUsers"
+        android:id="@+id/listViewBlockedUsers"
         android:layout_marginTop="10dp"/>
 
 </LinearLayout>

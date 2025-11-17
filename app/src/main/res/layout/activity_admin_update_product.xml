@@ -40,14 +40,38 @@
         android:layout_height="wrap_content"
         android:hint="Product Price"/>
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp">
+
+        <ImageButton
+            android:id="@+id/imageButtonPremium"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="Premium Item"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_crown_off" />
+
+        <TextView
+            android:id="@+id/textViewPremium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Premium Item"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:layout_margin="20dp"/>
+
+        </LinearLayout>
+
     <Button
         android:id="@+id/savechange"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:text="Save"/>
-
-
 
 
 </LinearLayout>

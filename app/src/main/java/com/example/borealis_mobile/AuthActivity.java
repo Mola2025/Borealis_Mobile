@@ -42,7 +42,6 @@ public class AuthActivity extends AppCompatActivity {
 
     // Admin Credentials
     private static final String ADMIN_EMAIL = "juan0213ca@gmail.com";
-    private static final String ADMIN_PASSWORD = "12345678";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +85,7 @@ public class AuthActivity extends AppCompatActivity {
         buttonForgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                resetPassword();
             }
         });
     }
@@ -137,18 +136,19 @@ public class AuthActivity extends AppCompatActivity {
                 return;
             }
 
-            if(email.equals(ADMIN_EMAIL) && password.equals(ADMIN_PASSWORD)){
-                Toast.makeText(this, "Welcome Admin", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(this, AdminHomePageActivity.class);
-                startActivity(intent);
-                finish();
-                return;
-            }
-
             firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(AuthActivity.this, new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if(task.isSuccessful()){
+
+                        if(email.equals(ADMIN_EMAIL)){
+                            Toast.makeText(AuthActivity.this, "Welcome Admin!", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(AuthActivity.this, AdminHomePageActivity.class);
+                            startActivity(intent);
+                            finish();
+                            return;
+                        }
+
                         Toast.makeText(AuthActivity.this, "User Login Successful", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(AuthActivity.this, UserHomePageActivity.class);
                         startActivity(intent);
@@ -194,7 +194,7 @@ public class AuthActivity extends AppCompatActivity {
                         if (firebaseuser != null){
                             String userId = firebaseuser.getUid();
 
-                            User user = new User(userId,name, username, email, password);
+                            User user = new User(userId,name, username, email, password, "");
 
                             // Save in realtime database
                             databaseReference.child(userId).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -215,6 +215,31 @@ public class AuthActivity extends AppCompatActivity {
                         else{
                             Toast.makeText(AuthActivity.this, "Registration Failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }
+                    }
+                }
+            });
+        }
+
+        private void resetPassword(){
+            String email = editTextEmail.getText().toString().trim();
+
+            if(TextUtils.isEmpty(email)){
+                Toast.makeText(this, "Please enter email", Toast.LENGTH_SHORT).show();
+            }
+
+            if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+                editTextEmail.setError("Invalid email");
+                return;
+            }
+
+            firebaseAuth.sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isComplete()){
+                        Toast.makeText(AuthActivity.this, "Password reset email sent", Toast.LENGTH_SHORT).show();
+                    }
+                    else{
+                        Toast.makeText(AuthActivity.this, "Password reset failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }
             });

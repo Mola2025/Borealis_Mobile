@@ -9,7 +9,6 @@
         android:endColor="#000000"
         android:centerX="0.5"
         android:centerY="0.5" />
-    <corners android:radius="20dp" />
     <padding
         android:left="10dp"
         android:top="10dp"

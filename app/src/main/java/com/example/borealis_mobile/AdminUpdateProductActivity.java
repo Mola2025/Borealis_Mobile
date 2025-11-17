@@ -8,18 +8,18 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
+import com.example.borealis_mobile.model.BaseElement;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -34,11 +34,15 @@ public class AdminUpdateProductActivity extends AppCompatActivity {
 
     EditText editTextName, editTextDesc, editTextPrice;
     ImageView imageView;
+
+    ImageButton imageButtonPremium;
+    private boolean isPremium = false;
     Button btnChooseImg, btnSaveProd;
     DatabaseReference databaseProduct;
     StorageReference storageReference;
 
     String productId, oldImageURL;
+    double oldPrice;
     Uri selectedImageUri;
 
     @Override
@@ -51,6 +55,7 @@ public class AdminUpdateProductActivity extends AppCompatActivity {
         editTextDesc = findViewById(R.id.etDescEp);
         editTextPrice = findViewById(R.id.etPriceEp);
         imageView = findViewById(R.id.imageViewProductEdit);
+        imageButtonPremium = findViewById(R.id.imageButtonPremium);
         btnChooseImg = findViewById(R.id.btnchooseimage);
         btnSaveProd = findViewById(R.id.savechange);
 
@@ -61,10 +66,21 @@ public class AdminUpdateProductActivity extends AppCompatActivity {
         Intent intent = getIntent();
         productId = intent.getStringExtra("productID");
         oldImageURL = intent.getStringExtra("productImageURL");
+        oldPrice = intent.getDoubleExtra("productPrice", 0.0);
 
         editTextName.setText(intent.getStringExtra("productName"));
         editTextDesc.setText(intent.getStringExtra("productDesc"));
-        editTextPrice.setText(intent.getStringExtra("productPrice"));
+        editTextPrice.setText(String.valueOf(oldPrice));
+
+
+        // Premium Item State
+        isPremium = intent.getBooleanExtra("productPremium", false);
+
+        if (isPremium) {
+            imageButtonPremium.setImageResource(R.drawable.ic_crown_on);
+        } else {
+            imageButtonPremium.setImageResource(R.drawable.ic_crown_off);
+        }
 
         // Load the image
         if (oldImageURL != null && !oldImageURL.isEmpty()) {
@@ -73,6 +89,18 @@ public class AdminUpdateProductActivity extends AppCompatActivity {
 
         btnChooseImg.setOnClickListener(v -> chooseImage());
         btnSaveProd.setOnClickListener(v -> updateProduct());
+
+        imageButtonPremium.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                isPremium = !isPremium;
+                if (isPremium) {
+                    imageButtonPremium.setImageResource(R.drawable.ic_crown_on);
+                } else {
+                    imageButtonPremium.setImageResource(R.drawable.ic_crown_off);
+                }
+            }
+        });
     }
 
     private void chooseImage() {
@@ -110,6 +138,7 @@ public class AdminUpdateProductActivity extends AppCompatActivity {
             StorageReference fileRef = storageReference.child(UUID.randomUUID().toString());
             fileRef.putFile(selectedImageUri)
                     .addOnSuccessListener(taskSnapshot -> fileRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                        deleteOldImage();
                         updateProductInDatabase(name, description, price, uri.toString());
                         progressDialog.dismiss();
                     }))
@@ -124,7 +153,7 @@ public class AdminUpdateProductActivity extends AppCompatActivity {
     }
 
     private void updateProductInDatabase(String name, String description, double price, String imageUrl) {
-        Item updatedProduct = new Item(productId, name, description, price, imageUrl);
+        ShopItem updatedProduct = new ShopItem(productId, new BaseElement(name, null, productId, "", description, null, null), price, imageUrl, isPremium);
 
         databaseProduct.child(productId).setValue(updatedProduct)
                 .addOnSuccessListener(aVoid -> {
@@ -155,5 +184,18 @@ public class AdminUpdateProductActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }).start();
+    }
+
+    private void deleteOldImage(){
+        if(oldImageURL != null && !oldImageURL.isEmpty()){
+            try{
+                StorageReference oldImageRef = FirebaseStorage.getInstance().getReferenceFromUrl(oldImageURL);
+                oldImageRef.delete().addOnSuccessListener(aVoid -> {
+                    Toast.makeText(this, "Old image deleted successfully", Toast.LENGTH_SHORT).show();
+                });
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
     }
 }

@@ -6,17 +6,17 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
+import com.example.borealis_mobile.model.BaseElement;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -26,10 +26,11 @@ import com.google.firebase.storage.UploadTask;
 public class AdminAddProductActivity extends AppCompatActivity {
 
     EditText editTextName, editTextDescription, editTextPrice;
-
     Button buttonSave, buttonSelectImage;
     ImageView imageViewProduct;
-
+    ImageButton imageButtonPremium;
+    private boolean isPremium = false;
+//    Spinner spinnerType;
     DatabaseReference databaseProduct;
     StorageReference storageReference;
 
@@ -49,6 +50,8 @@ public class AdminAddProductActivity extends AppCompatActivity {
         editTextDescription = findViewById(R.id.editTextProductDescription);
         editTextPrice = findViewById(R.id.editTextProductPrice);
         imageViewProduct = findViewById(R.id.imageViewProduct);
+        imageButtonPremium = findViewById(R.id.imageButtonPremium);
+//        spinnerType = findViewById(R.id.spinnerType);
 
         buttonSave = findViewById(R.id.buttonSaveProduct);
         buttonSelectImage = findViewById(R.id.buttonSelectImage);
@@ -69,6 +72,18 @@ public class AdminAddProductActivity extends AppCompatActivity {
             }
         });
 
+        imageButtonPremium.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                isPremium = !isPremium;
+                if (isPremium) {
+                    imageButtonPremium.setImageResource(R.drawable.ic_crown_on);
+                } else {
+                    imageButtonPremium.setImageResource(R.drawable.ic_crown_off);
+                }
+            }
+        });
+
 
     }
 
@@ -85,6 +100,7 @@ public class AdminAddProductActivity extends AppCompatActivity {
         String name = editTextName.getText().toString().trim();
         String description = editTextDescription.getText().toString().trim();
         String priceStr = editTextPrice.getText().toString().trim();
+//        String type = spinnerType.getSelectedItem().toString();
 
 
         if (TextUtils.isEmpty(name) || TextUtils.isEmpty(description) || TextUtils.isEmpty(priceStr) || imageUri == null) {
@@ -105,7 +121,20 @@ public class AdminAddProductActivity extends AppCompatActivity {
                 fileRef.getDownloadUrl().addOnSuccessListener(uri -> {
                     String imageUrl = uri.toString();
                     //create my object
-                    Item product = new Item(id, name, description, price, imageUrl);
+
+                    // Type = selection del spinner
+
+                    // if (type == "Class"){
+                    //  ShopItem product = new ShopItem(id, new Class(name, type, id, "", description, null, null), price, imageUrl);
+                    // }else if (type == "Item"){
+                    //  ShopItem product = new ShopItem(id, new Item(name, type, id, "", description, null, null), price, imageUrl);
+                    // }else if (type == "Race"){
+                    //  ShopItem product = new ShopItem(id, new Race(name, type, id, "", description, null, null), price, imageUrl);
+                    // }else if (type == "Spell"){
+                    //  ShopItem product = new ShopItem(id, new Spell(name, type, id, "", description, null, null), price, imageUrl);
+                    // }
+
+                    ShopItem product = new ShopItem(id, new BaseElement(name, null, id, "", description, null, null), price, imageUrl, isPremium);
                     databaseProduct.child(id).setValue(product).addOnSuccessListener(aVoid -> {
                         Toast.makeText(this, "Success Product added", Toast.LENGTH_SHORT).show();
                         finish();

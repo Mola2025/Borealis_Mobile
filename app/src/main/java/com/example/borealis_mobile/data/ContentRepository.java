@@ -1,14 +1,13 @@
 package com.example.borealis_mobile.data;
 
 import com.example.borealis_mobile.core.parser.BaseElementDeserializer;
-import com.example.borealis_mobile.core.parser.XmlContentParser;
-import com.example.borealis_mobile.core.parser.XmlIndexParser;
 import com.example.borealis_mobile.model.BaseElement;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 
+import android.content.Context;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -16,26 +15,19 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
-import java.util.Queue;
-import java.util.Set;
 
 public class ContentRepository {
     private static final Type CATALOGUE_TYPE = new TypeToken<Map<String, BaseElement>>() {}.getType();
 
     private final Gson gson = new GsonBuilder()
             .registerTypeAdapter(BaseElement.class, new BaseElementDeserializer())
-            .setPrettyPrinting()
             .create();
 
     private final File storage;
-    private final XmlIndexParser indexParser = new XmlIndexParser();
-    private final XmlContentParser contentParser = new XmlContentParser();
 
     public ContentRepository(File filesDir) {
         this.storage = new File(filesDir, "master_catalogue.json");
@@ -52,45 +44,21 @@ public class ContentRepository {
         }
         try (FileReader reader = new FileReader(storage)) {
             return gson.fromJson(reader, CATALOGUE_TYPE);
-        } catch (IOException e) {
-            return new HashMap<>();
-        } catch (JsonSyntaxException e) {
-            storage.delete();
+        } catch (IOException | JsonSyntaxException e) {
             return new HashMap<>();
         }
     }
-
-    public Map<String, BaseElement> loadContentFromIndex(String indexUrl) throws Exception {
-        Queue<String> urls = new LinkedList<>();
-        urls.add(indexUrl);
-
-        Set<String> visited = new HashSet<>();
-        Map<String, BaseElement> catalogue = new HashMap<>();
-
-        while (!urls.isEmpty()) {
-            String currentUrl = urls.poll();
-            if (visited.contains(currentUrl)) {
-                continue;
-            }
-            visited.add(currentUrl);
-            try (InputStream inputStream = fetchInputStream(currentUrl)) {
-                assert currentUrl != null;
-                if (currentUrl.endsWith(".index")) {
-                    List<String> newUrls = indexParser.extractContentFileUrls(inputStream);
-                    urls.addAll(newUrls);
-                } else if (currentUrl.endsWith(".xml")) {
-                    List<BaseElement> elements = contentParser.parseElements(inputStream);
-                    for (BaseElement element : elements) {
-                        catalogue.put(element.getId(), element);
-                    }
-                }
-            }
+    public Map<String, BaseElement> loadBasicCatalogue(InputStream inputStream) throws Exception {
+        try (java.io.InputStreamReader reader = new java.io.InputStreamReader(inputStream)) {
+            Map<String, BaseElement> catalogue = gson.fromJson(reader, CATALOGUE_TYPE);
+            return catalogue != null ? catalogue : new HashMap<>();
         }
-        return catalogue;
     }
-
-    private InputStream fetchInputStream(String urlString) throws IOException {
-        URL url = new URL(urlString);
-        return url.openStream();
+    public Map<String, BaseElement> loadFromAssets(Context context, String fileName) {
+        try (InputStream inputStream = context.getAssets().open(fileName)) {
+            return loadBasicCatalogue(inputStream);
+        } catch (Exception e) {
+            return new HashMap<>();
+        }
     }
 }

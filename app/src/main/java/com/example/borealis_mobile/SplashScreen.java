@@ -3,26 +3,25 @@ package com.example.borealis_mobile;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
+import com.example.borealis_mobile.core.util.DataHolder;
 import com.example.borealis_mobile.data.ContentRepository;
 import com.example.borealis_mobile.model.BaseElement;
 
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class SplashScreen extends AppCompatActivity {
-
-    private static final String CORE_INDEX_URL = "https://raw.githubusercontent.com/AuroraLegacy/elements/master/core.index";
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
+    private final Handler handler = new Handler(Looper.getMainLooper());
     private ContentRepository repository;
 
     @Override
@@ -34,6 +33,7 @@ public class SplashScreen extends AppCompatActivity {
         File filesDir = getFilesDir();
         repository = new ContentRepository(filesDir);
 
+        loadDataAndStart();
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -41,7 +41,7 @@ public class SplashScreen extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             }
-        }, 4000);
+        }, 3000);
     }
 
     private void loadDataAndStart() {
@@ -49,14 +49,26 @@ public class SplashScreen extends AppCompatActivity {
             Map<String, BaseElement> catalogue = null;
 
             try {
-                catalogue = repository.loadCatalogue();
+                catalogue = repository.loadFromAssets(this, "dnd_catalogue.json");
 
                 if (catalogue == null || catalogue.isEmpty()) {
-                    catalogue = repository.loadContentFromIndex(CORE_INDEX_URL);
+                    final Map<String, BaseElement> catToSave = catalogue;
+                    executor.execute(() -> {
+                        try {
+                            repository.saveCatalogue(catToSave);
+                        } catch (IOException ignored) { }
+                    });
                 }
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
+            final Map<String, BaseElement> finalCatalogue = catalogue;
+            handler.post(() -> onDataLoadComplete(finalCatalogue));
         });
+    }
+    private void onDataLoadComplete(Map<String, BaseElement> loadedCat) {
+        if (loadedCat != null) {
+            DataHolder.masterCat = loadedCat;
+        }
     }
 }

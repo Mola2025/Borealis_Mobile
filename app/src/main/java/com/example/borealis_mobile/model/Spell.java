@@ -30,4 +30,11 @@ public class Spell extends BaseElement {
     public String getRange() { return range; }
     public String getComponents() { return components; }
     public String getDuration() { return duration; }
+
+    public void setLevel(int level) { this.level = level; }
+    public void setSchool(String school) { this.school = school; }
+    public void setCastTime(String castTime) { this.castTime = castTime; }
+    public void setRange(String range) { this.range = range; }
+    public void setComponents(String components) { this.components = components; }
+    public void setDuration(String duration) { this.duration = duration; }
 }

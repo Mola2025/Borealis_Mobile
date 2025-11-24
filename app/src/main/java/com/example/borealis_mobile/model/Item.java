@@ -30,4 +30,11 @@ public class Item extends BaseElement {
     public String getWeight() { return weight; }
     public String getArmorClass() { return armorClass; }
     public String getStrengthReq() { return strengthReq; }
+
+    public void setCategory(String category) { this.category = category; }
+    public void setSlot(String slot) { this.slot = slot; }
+    public void setCost(String cost) { this.cost = cost; }
+    public void setWeight(String weight) { this.weight = weight; }
+    public void setArmorClass(String armorClass) { this.armorClass = armorClass; }
+    public void setStrengthReq(String strengthReq) { this.strengthReq = strengthReq; }
 }

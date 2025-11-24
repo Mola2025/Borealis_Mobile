@@ -528,19 +528,6 @@
                                 android:textStyle="bold"
                                 android:layout_marginBottom="8dp"/>
 
-                            <LinearLayout
-                                android:id="@+id/featuresTraitsContainer"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="[Placeholder: Esta área se poblará dinámicamente en Java con los rasgos de Raza y Clase.]"
-                                    android:textStyle="italic"
-                                    android:textColor="@color/gray"/>
-                            </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>

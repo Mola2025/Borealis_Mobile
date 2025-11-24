@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,7 +54,6 @@ public class UserHomePageActivity extends AppCompatActivity
     private DatabaseReference db;
 
     private CharacterRepository charRepo;
-    private List<Character> characters;
     private CharacterAdapter charAdapter;
 
 
@@ -67,7 +65,7 @@ public class UserHomePageActivity extends AppCompatActivity
 
         File appDir = getFilesDir();
         charRepo = new CharacterRepository(appDir);
-        characters = charRepo.loadCharacters();
+        List<Character> characters = charRepo.loadCharacters();
 
         drawerLayout_User = findViewById(R.id.drawerLayout_user);
         navigationView_User = findViewById(R.id.navigationView_user);

@@ -6,7 +6,6 @@ import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.RotateAnimation;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -25,8 +24,6 @@ import com.example.borealis_mobile.core.util.DataHolder;
 import com.example.borealis_mobile.data.CharacterRepository;
 import com.example.borealis_mobile.model.BaseElement;
 import com.example.borealis_mobile.model.Character;
-
-import com.example.borealis_mobile.model.Spell;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.io.IOException;
@@ -82,7 +79,6 @@ public class ModifyCharacterActivity extends AppCompatActivity {
     private ImageView indicatorManage;
     private TextInputEditText etCharacterName;
     private TextInputEditText etCharacterLevel;
-    private LinearLayout featuresTraitsContainer;
 
     // 7. CHARACTER SHEET
     private RelativeLayout headerSheet;
@@ -102,8 +98,8 @@ public class ModifyCharacterActivity extends AppCompatActivity {
 
     private Button btnSaveCharacter;
 
-    private List<BaseElement> items = new ArrayList<>();
-    private List<BaseElement> spells = new ArrayList<>();
+    private final List<BaseElement> items = new ArrayList<>();
+    private final List<BaseElement> spells = new ArrayList<>();
     private CharacterRepository charRepo;
     private Character currentChar;
     private static final List<String> MAGIC_CLASSES = List
@@ -269,7 +265,6 @@ public class ModifyCharacterActivity extends AppCompatActivity {
         indicatorManage = findViewById(R.id.indicatorManage);
         etCharacterName = findViewById(R.id.etCharacterName);
         etCharacterLevel = findViewById(R.id.etCharacterLevel);
-        featuresTraitsContainer = findViewById(R.id.featuresTraitsContainer);
 
         // CHARACTER SHEET
         headerSheet = findViewById(R.id.headerSheet);

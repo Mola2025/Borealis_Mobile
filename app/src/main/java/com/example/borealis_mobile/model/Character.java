@@ -23,18 +23,6 @@ public class Character implements Parcelable {
     private List<String> inventory;
 
     public Character() { }
-    public Character(String name, String race, String classTypeId, String level,
-                     HashMap<String, Integer> stats, List<String> features,
-                     List<String> spells, List<String> inventory) {
-        this.name = name;
-        this.race = race;
-        this.classTypeId = classTypeId;
-        this.level = level;
-        this.stats = stats;
-        this.features = features;
-        this.spells = spells;
-        this.inventory = inventory;
-    }
     protected Character(Parcel in) {
         id = in.readString();
         name = in.readString();
@@ -60,7 +48,7 @@ public class Character implements Parcelable {
         return DataHolder.masterCat.get(Id);
     }
 
-    public static final Creator<Character> CREATOR = new Creator<Character>() {
+    public static final Creator<Character> CREATOR = new Creator<>() {
         @Override
         public Character createFromParcel(Parcel in) {
             return new Character(in);

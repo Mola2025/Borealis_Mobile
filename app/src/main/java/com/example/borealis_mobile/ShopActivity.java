@@ -48,11 +48,8 @@ public class ShopActivity extends AppCompatActivity {
     // Variables para el carrito
     private HashMap<String, Integer> cart = new HashMap<>();
     private double totalAmount = 0.0;
-
     private Button payment;
-    private String PublishableKey = "";
-    private String SecretKey = "";
-
+    private APIKeys apiKeys = new APIKeys();
     private String CustomersURL = "https://api.stripe.com/v1/customers";
     private String EphericalKeyURL = "https://api.stripe.com/v1/ephemeral_keys";
     private String ClientSecretURL = "https://api.stripe.com/v1/payment_intents";
@@ -89,22 +86,22 @@ public class ShopActivity extends AppCompatActivity {
 
         //Payment PART!!!
 
-//        payment = findViewById(R.id.payment);
-//
-//        PaymentConfiguration.init(this, PublishableKey);
-//
-//        paymentSheet = new PaymentSheet(this, this::onPaymentResult);
-//
-//        payment.setOnClickListener(view -> {
-//            if (CustomerId != null && !CustomerId.isEmpty()) {
-//                paymentFlow();
-//            } else {
-//                Toast.makeText(ShopActivity.this, "Customer ID is not available", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//
-//        // Create customer and proceed after success
-//        createCustomer();
+        payment = findViewById(R.id.payment);
+
+        PaymentConfiguration.init(this, apiKeys.getPublishableKey());
+
+        paymentSheet = new PaymentSheet(this, this::onPaymentResult);
+
+        payment.setOnClickListener(view -> {
+            if (CustomerId != null && !CustomerId.isEmpty()) {
+                paymentFlow();
+            } else {
+                Toast.makeText(ShopActivity.this, "Customer ID is not available", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Create customer and proceed after success
+        createCustomer();
     }
 
 
@@ -137,7 +134,7 @@ public class ShopActivity extends AppCompatActivity {
         }) {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
-                headers.put("Authorization", "Bearer " + SecretKey);
+                headers.put("Authorization", "Bearer " + apiKeys.getSecretKey());
                 return headers;
             }
         };
@@ -174,7 +171,7 @@ public class ShopActivity extends AppCompatActivity {
         }) {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
-                headers.put("Authorization", "Bearer " + SecretKey);
+                headers.put("Authorization", "Bearer " + apiKeys.getSecretKey());
                 headers.put("Stripe-Version", "2022-11-15");
                 return headers;
             }
@@ -211,7 +208,7 @@ public class ShopActivity extends AppCompatActivity {
         }) {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
-                headers.put("Authorization", "Bearer " + SecretKey);
+                headers.put("Authorization", "Bearer " + apiKeys.getSecretKey());
                 return headers;
             }
 
@@ -244,6 +241,7 @@ public class ShopActivity extends AppCompatActivity {
             Toast.makeText(this, "Payment Success", Toast.LENGTH_SHORT).show();
             //Aca cuando se confirme que me lo guarde en una nueva collection de db realtime en firebase
             // y que me cree un record de la compra para order history para el admin
+            // Crear lista de productos comprados
         } else {
             Toast.makeText(this, "Payment Failed", Toast.LENGTH_SHORT).show();
         }

@@ -6,6 +6,7 @@ import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.RotateAnimation;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -25,10 +26,12 @@ import com.example.borealis_mobile.data.CharacterRepository;
 import com.example.borealis_mobile.model.BaseElement;
 import com.example.borealis_mobile.model.Character;
 
+import com.example.borealis_mobile.model.Spell;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -103,6 +106,8 @@ public class ModifyCharacterActivity extends AppCompatActivity {
     private List<BaseElement> spells = new ArrayList<>();
     private CharacterRepository charRepo;
     private Character currentChar;
+    private static final List<String> MAGIC_CLASSES = List
+            .of("Bard", "Cleric", "Druid", "Paladin", "Ranger", "Sorcerer", "Warlock", "Wizard");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,19 +119,23 @@ public class ModifyCharacterActivity extends AppCompatActivity {
             getSupportActionBar().setTitle("Modify Character");
         }
         charRepo = new CharacterRepository(getFilesDir());
+
+        initializeViews();
+        initializeCatalogueData();
+
         if (getIntent().hasExtra("character")) {
             currentChar = getIntent().getParcelableExtra("character");
+            if (currentChar == null)
+                currentChar = new Character();
         } else {
             currentChar = new Character();
         }
 
-        initializeViews();
-        initializeCatalogueData();
         setupTextWatchers();
+        loadCharacterData(currentChar);
         setupCollapsibleSections();
+        checkMagicClass(currentChar.getClassTypeId());
         populateDropdowns();
-
-        loadCharacterData("New Character", 1);
 
         btnSaveCharacter.setOnClickListener(v -> saveCharacter());
     }
@@ -144,6 +153,28 @@ public class ModifyCharacterActivity extends AppCompatActivity {
 
         currentChar.setRace(autoCompleteRace.getText().toString());
         currentChar.setClassTypeId(autoCompleteClass.getText().toString());
+
+        currentChar.setStats(new HashMap<>());
+        currentChar.getStats().put("STR", Integer.parseInt(autoCompleteStr.getText().toString()));
+        currentChar.getStats().put("DEX", Integer.parseInt(autoCompleteDex.getText().toString()));
+        currentChar.getStats().put("CON", Integer.parseInt(autoCompleteCon.getText().toString()));
+        currentChar.getStats().put("INT", Integer.parseInt(autoCompleteInt.getText().toString()));
+        currentChar.getStats().put("WIS", Integer.parseInt(autoCompleteWis.getText().toString()));
+        currentChar.getStats().put("CHA", Integer.parseInt(autoCompleteCha.getText().toString()));
+
+        currentChar.setSpells(new ArrayList<>());
+        currentChar.getSpells().add(autoCompleteSpell1.getText().toString());
+        currentChar.getSpells().add(autoCompleteSpell2.getText().toString());
+        currentChar.getSpells().add(autoCompleteSpell3.getText().toString());
+
+        currentChar.setInventory(new ArrayList<>());
+        for (int i = 0; i < inventoryItemsContainer.getChildCount(); i++) {
+            LinearLayout subCont = (LinearLayout) inventoryItemsContainer.getChildAt(i);
+            View v = subCont.getChildAt(1);
+            if (v instanceof TextView) {
+                currentChar.getInventory().add(((TextView) v).getText().toString());
+            }
+        }
 
         try {
             List<Character> allCharacters = charRepo.loadCharacters();
@@ -274,8 +305,8 @@ public class ModifyCharacterActivity extends AppCompatActivity {
         etCharacterLevel.addTextChangedListener(headerUpdaterWatcher);
     }
     private void updateCharacterHeader() {
-        String name = etCharacterName.getText().toString().trim();
-        String levelString = etCharacterLevel.getText().toString().trim();
+        String name = Objects.requireNonNull(etCharacterName.getText()).toString().trim();
+        String levelString = Objects.requireNonNull(etCharacterLevel.getText()).toString().trim();
 
         if (name.isEmpty()) {
             name = "Unnamed Character";
@@ -314,15 +345,16 @@ public class ModifyCharacterActivity extends AppCompatActivity {
         int itemCount = inventoryItemsContainer.getChildCount();
         if (itemCount == 0) {
             TextView empty = new TextView(this);
-            empty.setText("   (Empty Bag)");
+            empty.setText("(Empty Bag)");
             empty.setTextSize(14f);
             inventorySheetContainer.addView(empty);
         } else {
             for (int i = 0; i < itemCount; i++) {
-                View v = inventoryItemsContainer.getChildAt(i);
-                if (v instanceof TextView) {
+                LinearLayout subCont = (LinearLayout) inventoryItemsContainer.getChildAt(i);
+                if (subCont.getChildAt(1) instanceof TextView) {
+                    View v = subCont.getChildAt(1);
                     String itemText = ((TextView) v).getText().toString();
-                    addTextToSheetIfNotEmpty(itemText.substring(3));
+                    addTextToSheetIfNotEmpty(itemText.trim());
                 }
             }
         }
@@ -334,7 +366,6 @@ public class ModifyCharacterActivity extends AppCompatActivity {
         header.setPadding(0, 16, 0, 4);
         inventorySheetContainer.addView(header);
     }
-
     private void addTextToSheetIfNotEmpty(String text) {
         if (text != null && !text.trim().isEmpty()) {
             TextView tv = new TextView(this);
@@ -344,17 +375,24 @@ public class ModifyCharacterActivity extends AppCompatActivity {
         }
     }
     private void addItemToInventoryList(String itemName) {
-        TextView itemView = new TextView(this);
-        itemView.setText("• " + itemName);
-        itemView.setTextSize(16f);
-        itemView.setPadding(8, 8, 8, 8);
+        LinearLayout inventorySubContainer = new LinearLayout(this);
+        inventorySubContainer.setOrientation(LinearLayout.HORIZONTAL);
+        inventorySubContainer.setPadding(8, 8, 8, 8);
 
-        itemView.setOnClickListener(v -> {
+        TextView itemView = new TextView(this);
+        TextView itemDot = new TextView(this);
+        itemDot.setText("•");
+        itemDot.setTextSize(16f);
+        itemView.setText(itemName);
+        itemView.setTextSize(16f);
+
+        inventorySubContainer.setOnClickListener(v -> {
             inventoryItemsContainer.removeView(v);
             Toast.makeText(this, "Item removed from void", Toast.LENGTH_SHORT).show();
         });
-
-        inventoryItemsContainer.addView(itemView);
+        inventoryItemsContainer.addView(inventorySubContainer);
+        inventorySubContainer.addView(itemDot);
+        inventorySubContainer.addView(itemView);
     }
     private void setupCollapsibleSections() {
         // BUILD
@@ -445,12 +483,64 @@ public class ModifyCharacterActivity extends AppCompatActivity {
                 classNames
         );
         autoCompleteClass.setAdapter(classAdapter);
+        autoCompleteClass.setOnItemClickListener(
+                (parent, view, position, id) -> {
+                    String className = (String) parent.getItemAtPosition(position);
+                    checkMagicClass(className);
+        });
     }
+    private void loadCharacterData(Character c) {
+        if (c == null) return;
 
-    private void loadCharacterData(String name, int level) {
-        tvCharacterHeader.setText(name + " (Level " + level + ")");
-        etCharacterName.setText(name);
-        etCharacterLevel.setText(String.valueOf(level));
+        tvCharacterHeader.setText(c.getCharName() + " (Level " + c.getLevel() + ")");
+        etCharacterName.setText(c.getCharName());
+        etCharacterLevel.setText(String.valueOf(c.getLevel()));
+        autoCompleteRace.setText(c.getRace(), false);
+        autoCompleteClass.setText(c.getClassTypeId(), false);
+
+        if (c.getStats() != null) {
+            autoCompleteStr.setText(String.valueOf(c.getStats().getOrDefault("STR", 10)));
+            autoCompleteDex.setText(String.valueOf(c.getStats().getOrDefault("DEX", 10)));
+            autoCompleteCon.setText(String.valueOf(c.getStats().getOrDefault("CON", 10)));
+            autoCompleteInt.setText(String.valueOf(c.getStats().getOrDefault("INT", 10)));
+            autoCompleteWis.setText(String.valueOf(c.getStats().getOrDefault("WIS", 10)));
+            autoCompleteCha.setText(String.valueOf(c.getStats().getOrDefault("CHA", 10)));
+        }
+        if (c.getInventory() != null) {
+            for (String item : c.getInventory()) {
+                addItemToInventoryList(item);
+            }
+        }
+        if (c.getSpells() != null) {
+            List<String> spells = c.getSpells();
+            if (!spells.isEmpty()) autoCompleteSpell1.setText(spells.get(0), false);
+            if (spells.size() > 1) autoCompleteSpell2.setText(spells.get(1), false);
+            if (spells.size() > 2) autoCompleteSpell3.setText(spells.get(2), false);
+        }
+    }
+    private void checkMagicClass(String className) {
+        if (className == null || className.trim().isEmpty()) {
+            enableSpellsSection(false);
+            currentChar.setSpells(new ArrayList<>());
+            return;
+        }
+        boolean isMagic = MAGIC_CLASSES.contains(className.trim());
+        enableSpellsSection(isMagic);
+    }
+    private void enableSpellsSection(boolean enable) {
+        setupCollapsibleSection(
+                headerSpells,
+                contentSpells,
+                indicatorSpells,
+                !enable,
+                null
+        );
+        if (!enable) {
+            contentSpells.setVisibility(View.GONE);
+            indicatorSpells.setRotation(0f);
+        } else {
+            setupCollapsibleSection(headerMagic, contentMagic, indicatorMagic, false, null);
+        }
     }
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -464,10 +554,26 @@ public class ModifyCharacterActivity extends AppCompatActivity {
 
         if (isDisabled) {
             header.setAlpha(0.5f);
+            header.getChildAt(0).setAlpha(0.5f);
+            header.setClickable(false);
+            content.setVisibility(View.GONE);
+            content.setActivated(false);
             if (disabledIndicator != null) {
                 disabledIndicator.setVisibility(View.VISIBLE);
             }
+            autoCompleteSpell1.setText("");
+            autoCompleteSpell2.setText("");
+            autoCompleteSpell3.setText("");
             return;
+        } else {
+            header.setAlpha(1f);
+            header.getChildAt(0).setAlpha(1f);
+            header.setClickable(true);
+            content.setActivated(true);
+            if (disabledIndicator != null) {
+                disabledIndicator.setVisibility(View.GONE);
+                disabledIndicator.setAlpha(0f);
+            }
         }
 
         header.setOnClickListener(v -> toggleSection(content, indicator));
@@ -504,15 +610,5 @@ public class ModifyCharacterActivity extends AppCompatActivity {
         rotate.setDuration(200);
         rotate.setFillAfter(true);
         indicator.startAnimation(rotate);
-    }
-
-    private List<BaseElement> getSpells() {
-        List<BaseElement> spells = new ArrayList<>();
-        for (BaseElement element : DataHolder.masterCat.values()) {
-            if ("Spell".equals(element.getType())) {
-                spells.add(element);
-            }
-        }
-        return spells;
     }
 }

@@ -279,7 +279,7 @@
                                         <TextView
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:text="4. SPELLS"
+                                            android:text="SPELLS"
                                             android:textSize="18sp"
                                             android:textStyle="bold"
                                             android:textColor="@color/black" />
@@ -313,7 +313,7 @@
                                         <TextView
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:text="Select Spells (Auto-Complete)"
+                                            android:text="Select Spells"
                                             android:textStyle="italic"
                                             android:layout_marginBottom="8dp"/>
 

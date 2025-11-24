@@ -224,8 +224,6 @@
     "weight": 6,
     "cost": 10
   },
-
-  // ARMAS (Weapon)
   "item-longsword": {
     "type": "Weapon",
     "id": "item-longsword",

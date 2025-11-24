@@ -1,5 +1,6 @@
 package com.example.borealis_mobile.model;
 
+import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -40,7 +41,12 @@ public class Character implements Parcelable {
         race = in.readString();
         classTypeId = in.readString();
         level = in.readString();
-        stats = in.readHashMap(HashMap.class.getClassLoader(), String.class, Integer.class);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            stats = in.readHashMap(HashMap.class.getClassLoader(), String.class, Integer.class);
+        } else {
+            HashMap<String, Integer> tmpStats = (HashMap<String, Integer>) in.readSerializable();
+            stats = tmpStats == null ? new HashMap<>() : tmpStats;
+        }
         features = in.createStringArrayList();
         spells = in.createStringArrayList();
         inventory = in.createStringArrayList();

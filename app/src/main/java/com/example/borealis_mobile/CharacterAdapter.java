@@ -3,6 +3,7 @@ package com.example.borealis_mobile;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,14 +15,19 @@ import java.util.List;
 public class CharacterAdapter extends RecyclerView.Adapter<CharacterAdapter.CharacterViewHolder> {
 
     private final List<Character> characters;
-    private final OnCharacterClickListener listener;
+    private final OnCharacterClickListener clickListener;
+    private final OnCharacterDeleteListener deleteListener;
 
     public interface OnCharacterClickListener {
         void onCharacterClick(Character character);
     }
-    public CharacterAdapter(List<Character> characters, OnCharacterClickListener listener) {
+    public interface OnCharacterDeleteListener {
+        void onCharacterDelete(Character character);
+    }
+    public CharacterAdapter(List<Character> characters, OnCharacterClickListener clickListener, OnCharacterDeleteListener deleteListener) {
         this.characters = characters;
-        this.listener = listener;
+        this.clickListener = clickListener;
+        this.deleteListener = deleteListener;
     }
 
     @NonNull
@@ -41,7 +47,8 @@ public class CharacterAdapter extends RecyclerView.Adapter<CharacterAdapter.Char
         holder.charCardClass.setText(character.getClassTypeId());
         holder.charCardLevel.setText(character.getLevel());
 
-        holder.itemView.setOnClickListener(v -> listener.onCharacterClick(character));
+        holder.itemView.setOnClickListener(v -> clickListener.onCharacterClick(character));
+        holder.charCardDel.setOnClickListener(v -> deleteListener.onCharacterDelete(character));
     }
 
     @Override
@@ -57,6 +64,7 @@ public class CharacterAdapter extends RecyclerView.Adapter<CharacterAdapter.Char
 
     public static class CharacterViewHolder extends RecyclerView.ViewHolder {
         private final TextView charCardName, charCardRace, charCardClass, charCardLevel;
+        private final ImageButton charCardDel;
 
         public CharacterViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -64,6 +72,7 @@ public class CharacterAdapter extends RecyclerView.Adapter<CharacterAdapter.Char
             charCardRace = itemView.findViewById(R.id.charCardRace);
             charCardClass = itemView.findViewById(R.id.charCardClass);
             charCardLevel = itemView.findViewById(R.id.charCardLevel);
+            charCardDel = itemView.findViewById(R.id.charCardDel);
         }
     }
 }

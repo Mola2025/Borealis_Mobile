@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,7 +40,8 @@ import java.util.List;
 
 import com.example.borealis_mobile.model.Character;
 
-public class UserHomePageActivity extends AppCompatActivity implements CharacterAdapter.OnCharacterClickListener {
+public class UserHomePageActivity extends AppCompatActivity
+        implements CharacterAdapter.OnCharacterClickListener, CharacterAdapter.OnCharacterDeleteListener {
 
     // UI Drawable Lateral Menu
     DrawerLayout drawerLayout_User;
@@ -120,7 +122,7 @@ public class UserHomePageActivity extends AppCompatActivity implements Character
         drawerLayout_User.addDrawerListener(toggle);
         toggle.syncState();
 
-        charAdapter = new CharacterAdapter(characters, this);
+        charAdapter = new CharacterAdapter(characters, this, this);
         charRecycler.setLayoutManager(new LinearLayoutManager(this));
         charRecycler.setAdapter(charAdapter);
     }
@@ -130,6 +132,27 @@ public class UserHomePageActivity extends AppCompatActivity implements Character
         Intent intent = new Intent(this, ModifyCharacterActivity.class);
         intent.putExtra("character", character);
         startActivity(intent);
+    }
+    @Override
+    public void onCharacterDelete(Character character) {
+        try {
+            List<Character> allCharacters = charRepo.loadCharacters();
+            for (int i = 0; i < allCharacters.size(); i++) {
+                Character c = allCharacters.get(i);
+
+                if (c.getId().equals(character.getId())) {
+                    allCharacters.remove(i);
+                    break;
+                }
+            }
+            charRepo.saveCharacters(allCharacters);
+            charAdapter.updateCharacters(allCharacters);
+            charAdapter.notifyDataSetChanged();
+            Toast.makeText(this, "Character deleted", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Error deleting character", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

@@ -8,6 +8,7 @@ public class User {
     private String email;
     private String password;
     private String imageURL;
+    private boolean isPremium;
 
     public User() {
     }
@@ -18,6 +19,7 @@ public class User {
         this.email = email;
         this.password = password;
         this.imageURL = imageURL;
+        this.isPremium = false;
     }
 
     public User(String id, String name, String username, String email, String password) {
@@ -70,5 +72,13 @@ public class User {
 
     public void setImageURL(String imageURL) {
         this.imageURL = imageURL;
+    }
+
+    public boolean isPremium() {
+        return isPremium;
+    }
+
+    public void setPremium(boolean premium) {
+        isPremium = premium;
     }
 }

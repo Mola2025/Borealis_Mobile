@@ -130,5 +130,166 @@
     "startingGold": "4d4 x 10 gp",
     "proficiencies": ["Daggers", "Darts", "Slings", "Quarterstaffs", "Light Crossbows"],
     "saveProficiencies": ["Intelligence", "Wisdom"]
+  },
+  "race-dwarf": {
+    "type": "Race",
+    "id": "race-dwarf",
+    "name": "Dwarf",
+    "source": "PHB",
+    "description": "Stout and hearty, dwarves are known for their skill in metalwork and resilience.",
+    "abilityScoreIncreases": {
+      "Constitution": 2
+    },
+    "speed": 25,
+    "size": "Medium"
+  },
+  "race-elf": {
+    "type": "Race",
+    "id": "race-elf",
+    "name": "Elf",
+    "source": "PHB",
+    "description": "Graceful and long-lived, elves are tied to the ancient forests and are masters of archery.",
+    "abilityScoreIncreases": {
+      "Dexterity": 2
+    },
+    "speed": 30,
+    "size": "Medium"
+  },
+  "spell-firebolt": {
+    "type": "Spell",
+    "id": "spell-firebolt",
+    "name": "Fire Bolt",
+    "source": "PHB",
+    "level": 0,
+    "school": "Evocation",
+    "castingTime": "1 Action",
+    "range": "120 feet",
+    "duration": "Instantaneous",
+    "components": "V, S",
+    "description": "Hurl a mote of fire at a creature or object."
+  },
+  "spell-curewounds": {
+    "type": "Spell",
+    "id": "spell-curewounds",
+    "name": "Cure Wounds",
+    "source": "PHB",
+    "level": 1,
+    "school": "Abjuration",
+    "castingTime": "1 Action",
+    "range": "Touch",
+    "duration": "Instantaneous",
+    "components": "V, S",
+    "description": "A creature you touch regains a number of hit points equal to 1d8 + your spellcasting ability modifier."
+  },
+  "spell-magearmor": {
+    "type": "Spell",
+    "id": "spell-magearmor",
+    "name": "Mage Armor",
+    "source": "PHB",
+    "level": 1,
+    "school": "Abjuration",
+    "castingTime": "1 Action",
+    "range": "Touch",
+    "duration": "8 Hours",
+    "components": "V, S, M",
+    "description": "A protective magical force surrounds a creature you touch, granting it a +3 bonus to AC."
+  },
+  "item-leatherarmor": {
+    "type": "Armor",
+    "id": "item-leatherarmor",
+    "name": "Leather Armor",
+    "source": "PHB",
+    "description": "The lightest form of armor.",
+    "armorClass": 11,
+    "weight": 10,
+    "cost": 10
+  },
+  "item-chainmail": {
+    "type": "Armor",
+    "id": "item-chainmail",
+    "name": "Chain Mail",
+    "source": "PHB",
+    "description": "A suit of interlocking metal rings.",
+    "armorClass": 16,
+    "weight": 55,
+    "cost": 50
+  },
+  "item-shield": {
+    "type": "Armor",
+    "id": "item-shield",
+    "name": "Shield",
+    "source": "PHB",
+    "description": "A piece of equipment held in one hand.",
+    "armorClass": 2,
+    "weight": 6,
+    "cost": 10
+  },
+
+  // ARMAS (Weapon)
+  "item-longsword": {
+    "type": "Weapon",
+    "id": "item-longsword",
+    "name": "Longsword",
+    "source": "PHB",
+    "description": "Versatile martial melee weapon.",
+    "damage": "1d8 slashing",
+    "weight": 3,
+    "cost": 15
+  },
+  "item-lightcrossbow": {
+    "type": "Weapon",
+    "id": "item-lightcrossbow",
+    "name": "Light Crossbow",
+    "source": "PHB",
+    "description": "Two-handed ranged weapon.",
+    "damage": "1d8 piercing",
+    "weight": 5,
+    "cost": 35
+  },
+  "item-dagger": {
+    "type": "Weapon",
+    "id": "item-dagger",
+    "name": "Dagger",
+    "source": "PHB",
+    "description": "Finesse, light, thrown weapon.",
+    "damage": "1d4 piercing",
+    "weight": 1,
+    "cost": 2
+  },
+  "item-potofhealing": {
+    "type": "Magic Item",
+    "id": "item-potofhealing",
+    "name": "Potion of Healing",
+    "source": "DMG",
+    "description": "Restores 2d4 + 2 hit points.",
+    "rarity": "Common",
+    "cost": 50
+  },
+  "item-cloakofinvis": {
+    "type": "Magic Item",
+    "id": "item-cloakofinvis",
+    "name": "Cloak of Invisibility",
+    "source": "DMG",
+    "description": "Makes the wearer invisible when the hood is drawn.",
+    "rarity": "Legendary",
+    "attunement": true
+  },
+  "item-rope": {
+    "type": "Item",
+    "id": "item-rope",
+    "name": "Hempen Rope (50 ft.)",
+    "source": "PHB",
+    "description": "Standard 50 feet of hempen rope.",
+    "weight": 10,
+    "cost": 1
+  },
+  "item-rations": {
+    "type": "Item",
+    "id": "item-rations",
+    "name": "Rations (1 day)",
+    "source": "PHB",
+    "description": "Dry food that can sustain one person for a day.",
+    "weight": 2,
+    "cost": 0.5
   }
 }

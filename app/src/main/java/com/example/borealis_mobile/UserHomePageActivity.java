@@ -18,7 +18,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.borealis_mobile.data.CharacterRepository;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -28,22 +31,31 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.File;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 
-public class UserHomePageActivity extends AppCompatActivity {
+import com.example.borealis_mobile.model.Character;
+
+public class UserHomePageActivity extends AppCompatActivity implements CharacterAdapter.OnCharacterClickListener {
 
     // UI Drawable Lateral Menu
     DrawerLayout drawerLayout_User;
     NavigationView navigationView_User;
-
-    ImageView imgProfile, btnshop;
+    RecyclerView charRecycler;
+    ImageView imgProfile, btnShop;
     TextView username;
-    FloatingActionButton btncreatecharacter;
+    FloatingActionButton btnCreateCharacter;
 
     private FirebaseAuth firebaseAuth;
     private DatabaseReference db;
+
+    private CharacterRepository charRepo;
+    private List<Character> characters;
+    private CharacterAdapter charAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,13 +63,18 @@ public class UserHomePageActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_user_home_page);
 
+        File appDir = getFilesDir();
+        charRepo = new CharacterRepository(appDir);
+        characters = charRepo.loadCharacters();
+
         drawerLayout_User = findViewById(R.id.drawerLayout_user);
         navigationView_User = findViewById(R.id.navigationView_user);
         View headerView = navigationView_User.getHeaderView(0);
         imgProfile = headerView.findViewById(R.id.imgProfile);
         username = headerView.findViewById(R.id.username);
-        btncreatecharacter = findViewById(R.id.btnCreateCharacter);
-        btnshop = findViewById(R.id.btnShop);
+        btnCreateCharacter = findViewById(R.id.btnCreateCharacter);
+        btnShop = findViewById(R.id.btnShop);
+        charRecycler = findViewById(R.id.charRecycler);
 
         firebaseAuth = FirebaseAuth.getInstance();
         db = FirebaseDatabase.getInstance().getReference("users");
@@ -65,12 +82,12 @@ public class UserHomePageActivity extends AppCompatActivity {
         loadUserData();
 
 
-        btncreatecharacter.setOnClickListener(v -> {
+        btnCreateCharacter.setOnClickListener(v -> {
             Intent intent = new Intent(this, ModifyCharacterActivity.class);
             startActivity(intent);
         });
 
-        btnshop.setOnClickListener(v -> {
+        btnShop.setOnClickListener(v -> {
             Intent intent = new Intent(this, ShopActivity.class);
             startActivity(intent);
         });
@@ -82,12 +99,6 @@ public class UserHomePageActivity extends AppCompatActivity {
             if (id == R.id.nav_settings) {
                     Intent intent2 = new Intent(this, EditProfileActivity.class);
                     startActivity(intent2);
-            } else if (id == R.id.nav_favorite_items) {
-//                    Intent intent3 = new Intent(this, AdminOrderHistoryActivity.class);
-//                    startActivity(intent3);
-            } else if (id == R.id.nav_user_characters) {
-//                    Intent intent4 = new Intent(this, AdminBlockUsersActivity.class);
-//                    startActivity(intent4);
             } else if (id == R.id.nav_logout) {
                 FirebaseAuth.getInstance().signOut();
                 Intent intent5 = new Intent(this, AuthActivity.class);
@@ -98,20 +109,34 @@ public class UserHomePageActivity extends AppCompatActivity {
             return true;
         });
 
-
-        // Enable Drawer // Esto sirve para crear un icono en la toolbar de arriba para poder abrir la barra lateral :)))))))) casi que no
         Toolbar toolbar = findViewById(R.id.toolbar_user);
         setSupportActionBar(toolbar);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                // This es la actividad donde esta el menu, drawerLayout es el layout que contiene el menu, toolbar es la toolbar que contiene el icono ↓↓
                 this, drawerLayout_User, toolbar,
                 R.string.navigation_drawer_open,
                 R.string.navigation_drawer_close);
 
-        // Conectar el icono con el menu
         drawerLayout_User.addDrawerListener(toggle);
         toggle.syncState();
+
+        charAdapter = new CharacterAdapter(characters, this);
+        charRecycler.setLayoutManager(new LinearLayoutManager(this));
+        charRecycler.setAdapter(charAdapter);
+    }
+
+    @Override
+    public void onCharacterClick(Character character) {
+        Intent intent = new Intent(this, ModifyCharacterActivity.class);
+        intent.putExtra("character", character);
+        startActivity(intent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        List<Character> updatedCharacters = charRepo.loadCharacters();
+        charAdapter.updateCharacters(updatedCharacters);
     }
 
     private void loadUserData() {
@@ -142,7 +167,7 @@ public class UserHomePageActivity extends AppCompatActivity {
         });
     }
 
-    // 🔹 Load image from URL
+    // Load image from URL
     private void loadImageFromURL(String imageUrl) {
         new Thread(() -> {
             try {

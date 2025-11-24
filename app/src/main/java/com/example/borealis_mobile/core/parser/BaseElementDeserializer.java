@@ -4,6 +4,7 @@ import com.example.borealis_mobile.model.BaseElement;
 import com.example.borealis_mobile.model.Item;
 import com.example.borealis_mobile.model.Race;
 import com.example.borealis_mobile.model.Spell;
+import com.example.borealis_mobile.model.Class;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;

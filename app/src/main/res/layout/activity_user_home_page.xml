@@ -35,7 +35,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <!--  Aca iria su listview de lo que tenga el usuario o el shop no se xd              -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/charRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/btnCreateCharacter"

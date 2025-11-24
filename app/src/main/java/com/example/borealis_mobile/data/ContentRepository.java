@@ -2,6 +2,7 @@ package com.example.borealis_mobile.data;
 
 import com.example.borealis_mobile.core.parser.BaseElementDeserializer;
 import com.example.borealis_mobile.model.BaseElement;
+import com.example.borealis_mobile.model.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
@@ -15,8 +16,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -58,6 +57,8 @@ public class ContentRepository {
         try (InputStream inputStream = context.getAssets().open(fileName)) {
             return loadBasicCatalogue(inputStream);
         } catch (Exception e) {
+            System.err.print("FATAL ERROR LOADING CATALOGUE FROM ASSETS: ");
+            e.printStackTrace();
             return new HashMap<>();
         }
     }

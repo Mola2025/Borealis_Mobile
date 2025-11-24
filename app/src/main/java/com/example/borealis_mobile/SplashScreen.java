@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,14 +35,11 @@ public class SplashScreen extends AppCompatActivity {
         repository = new ContentRepository(filesDir);
 
         loadDataAndStart();
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent intent = new Intent(SplashScreen.this, AuthActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        }, 3000);
+        //new Handler().postDelayed(() -> {
+        //    Intent intent = new Intent(SplashScreen.this, AuthActivity.class);
+        //    startActivity(intent);
+        //    finish();
+        //}, 3000);
     }
 
     private void loadDataAndStart() {
@@ -70,5 +68,13 @@ public class SplashScreen extends AppCompatActivity {
         if (loadedCat != null) {
             DataHolder.masterCat = loadedCat;
         }
+
+        Handler handler = new Handler();
+        handler.postDelayed(() -> {
+            Intent intent = new Intent(SplashScreen.this, AuthActivity.class);
+            startActivity(intent);
+
+            finish();
+        }, 3000);
     }
 }

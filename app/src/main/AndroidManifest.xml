@@ -14,6 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Base.Theme.Borealis_Mobile">
         <activity
+            android:name=".Checkout"
+            android:exported="false" />
+        <activity
             android:name=".AdminBlockedUsersList"
             android:exported="false" />
         <activity

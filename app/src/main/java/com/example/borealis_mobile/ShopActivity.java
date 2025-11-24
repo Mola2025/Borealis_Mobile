@@ -1,5 +1,6 @@
 package com.example.borealis_mobile;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,6 +18,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,6 +32,7 @@ import com.stripe.android.paymentsheet.PaymentSheetResult;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,18 +40,13 @@ import java.util.Map;
 public class ShopActivity extends AppCompatActivity {
 
     private ListView listViewProducts;
+    private FloatingActionButton btnCheckout;
     private UserShopItemAdapter adapter;
     private ArrayList<ShopItem> productList;
     private FirebaseAuth auth;
     private DatabaseReference userRef;
-    private DatabaseReference ordersRef;
     private DatabaseReference productsRef;
     private boolean isUserPremium = false;
-
-    // Variables para el carrito
-    private HashMap<String, Integer> cart = new HashMap<>();
-    private double totalAmount = 0.0;
-    private Button payment;
     private APIKeys apiKeys = new APIKeys();
     private String CustomersURL = "https://api.stripe.com/v1/customers";
     private String EphericalKeyURL = "https://api.stripe.com/v1/ephemeral_keys";
@@ -57,7 +55,7 @@ public class ShopActivity extends AppCompatActivity {
     private String CustomerId = null;  // Initialize CustomerId as null
     private String EphericalKey;
     private String ClientSecret;
-    private PaymentSheet paymentSheet;
+
     private String Amount = "20000";  // Amount in cents
     private String Currency = "usd";  // Default currency
 
@@ -69,10 +67,9 @@ public class ShopActivity extends AppCompatActivity {
 
         auth = FirebaseAuth.getInstance();
         userRef = FirebaseDatabase.getInstance().getReference("users");
-        ordersRef = FirebaseDatabase.getInstance().getReference("orders");
         productsRef = FirebaseDatabase.getInstance().getReference("products");
 
-
+        btnCheckout = findViewById(R.id.btnCheckout);
         listViewProducts = findViewById(R.id.listViewProducts);
         productList = new ArrayList<>();
         adapter = new UserShopItemAdapter(this, productList);
@@ -81,29 +78,18 @@ public class ShopActivity extends AppCompatActivity {
         checkUserPremiumStatus();
         loadProducts();
 
-
-
-
-        //Payment PART!!!
-
-        payment = findViewById(R.id.payment);
-
-        PaymentConfiguration.init(this, apiKeys.getPublishableKey());
-
-        paymentSheet = new PaymentSheet(this, this::onPaymentResult);
-
-        payment.setOnClickListener(view -> {
-            if (CustomerId != null && !CustomerId.isEmpty()) {
-                paymentFlow();
-            } else {
-                Toast.makeText(ShopActivity.this, "Customer ID is not available", Toast.LENGTH_SHORT).show();
-            }
-        });
-
         // Create customer and proceed after success
         createCustomer();
-    }
 
+        btnCheckout.setOnClickListener(v -> {
+            Map<String, UserShopItemAdapter.CartItem> cart = adapter.getCart();
+
+            Intent intent = new Intent(ShopActivity.this, Checkout.class);
+            intent.putExtra("cartMap", (Serializable) cart);
+            intent.putExtra("customerId", CustomerId);
+            startActivity(intent);
+        });
+    }
 
     private void createCustomer() {
         StringRequest request = new StringRequest(Request.Method.POST, CustomersURL, new Response.Listener<String>() {
@@ -226,27 +212,6 @@ public class ShopActivity extends AppCompatActivity {
         requestQueue.add(request);
     }
 
-    private void paymentFlow() {
-        if (ClientSecret != null && !ClientSecret.isEmpty()) {
-            paymentSheet.presentWithPaymentIntent(ClientSecret, new PaymentSheet.Configuration("Stripe", new PaymentSheet.CustomerConfiguration(
-                    CustomerId, EphericalKey
-            )));
-        } else {
-            Toast.makeText(ShopActivity.this, "Client Secret not available", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void onPaymentResult(PaymentSheetResult paymentSheetResult) {
-        if (paymentSheetResult instanceof PaymentSheetResult.Completed) {
-            Toast.makeText(this, "Payment Success", Toast.LENGTH_SHORT).show();
-            //Aca cuando se confirme que me lo guarde en una nueva collection de db realtime en firebase
-            // y que me cree un record de la compra para order history para el admin
-            // Crear lista de productos comprados
-        } else {
-            Toast.makeText(this, "Payment Failed", Toast.LENGTH_SHORT).show();
-        }
-    }
-
     private void checkUserPremiumStatus() {
         String currentUserId = auth.getCurrentUser().getUid();
         userRef.child(currentUserId).child("isPremium").addValueEventListener(new ValueEventListener() {
@@ -285,4 +250,6 @@ public class ShopActivity extends AppCompatActivity {
             }
         });
     }
+
+
 }

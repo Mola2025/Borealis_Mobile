@@ -21,9 +21,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.InputStream;
+import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class UserShopItemAdapter extends BaseAdapter {
 
@@ -33,13 +36,14 @@ public class UserShopItemAdapter extends BaseAdapter {
     private FirebaseAuth auth;
     private boolean isUserPremium = false;
 
+    private Map<String, CartItem> cartMap = new HashMap<>();
+
     public UserShopItemAdapter(Context c, ArrayList<ShopItem> list) {
         context = c;
         productList = list;
         auth = FirebaseAuth.getInstance();
         userRef = FirebaseDatabase.getInstance().getReference("users");
 
-        // Verificar si el usuario es premium // Toca añadir a la clase User el bool de isPremium!!!!
         checkUserPremiumStatus();
     }
 
@@ -56,6 +60,10 @@ public class UserShopItemAdapter extends BaseAdapter {
             @Override
             public void onCancelled(DatabaseError databaseError) {}
         });
+    }
+
+    public Map<String, CartItem> getCart() {
+        return cartMap;
     }
 
     @Override
@@ -117,13 +125,29 @@ public class UserShopItemAdapter extends BaseAdapter {
             }
 
             int currentQuantity = Integer.parseInt(quantityText.getText().toString().replace("Quantity = ", ""));
-            quantityText.setText("Quantity = " + (currentQuantity + 1));
+            int newQuantity = currentQuantity + 1;
+            quantityText.setText("Quantity = " + newQuantity);
+
+            if (!cartMap.containsKey(product.getId())) {
+                cartMap.put(product.getId(), new CartItem(product.getId(), product.getBaseElement().getName(), newQuantity, product.getPrice()));
+            } else {
+                cartMap.get(product.getId()).quantity = newQuantity;
+            }
         });
 
         btnDecrease.setOnClickListener(v -> {
             int currentQuantity = Integer.parseInt(quantityText.getText().toString().replace("Quantity = ", ""));
             if (currentQuantity > 0) {
-                quantityText.setText("Quantity = " + (currentQuantity - 1));
+                int newQuantity = currentQuantity - 1;
+                quantityText.setText("Quantity = " + newQuantity);
+
+                if (newQuantity == 0) {
+                    cartMap.remove(product.getId());
+                } else {
+                    if (cartMap.containsKey(product.getId())) {
+                        cartMap.get(product.getId()).quantity = newQuantity;
+                    }
+                }
             }
         });
 
@@ -159,6 +183,20 @@ public class UserShopItemAdapter extends BaseAdapter {
             }else{
                 imageView.setImageResource(android.R.drawable.ic_menu_report_image);
             }
+        }
+    }
+
+    public static class CartItem implements Serializable {
+        public String productId;
+        public String name;
+        public int quantity;
+        public double price;
+
+        public CartItem(String productId, String name, int quantity, double price) {
+            this.productId = productId;
+            this.name = name;
+            this.quantity = quantity;
+            this.price = price;
         }
     }
 }

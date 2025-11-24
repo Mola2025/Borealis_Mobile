@@ -14,15 +14,21 @@ import android.widget.TextView;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 public class OrderAdapter extends BaseAdapter {
     private Context context;
-    private ArrayList<Order> orderList;
+    private List<Order> orderList;
+    private LayoutInflater inflater;
 
-    public OrderAdapter(Context c, ArrayList<Order> list) {
+    public OrderAdapter(Context c, List<Order> list) {
         context = c;
         orderList = list;
+        inflater = LayoutInflater.from(context);
     }
 
     @Override
@@ -42,62 +48,53 @@ public class OrderAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.order_card, parent, false);
         }
 
         Order order = orderList.get(position);
 
-        ImageView imageView = convertView.findViewById(R.id.profileImage);
-        TextView nameText = convertView.findViewById(R.id.tvUsername);
-        TextView priceText = convertView.findViewById(R.id.tvItemPrice);
-        TextView userText = convertView.findViewById(R.id.tvUserEmail);
+        TextView tvOrderId    = convertView.findViewById(R.id.tvOrderId);
+        TextView tvOrderUser  = convertView.findViewById(R.id.tvOrderUser);
+        TextView tvOrderDate  = convertView.findViewById(R.id.tvOrderDate);
+        TextView tvOrderItems = convertView.findViewById(R.id.tvOrderItems);
+        TextView tvOrderTotal = convertView.findViewById(R.id.tvOrderTotal);
 
 
-        nameText.setText(order.getProductName());
-        priceText.setText("$ " + order.getTotalAmount());
-        userText.setText("Comprado por: " + order.getUserId());
+        tvOrderId.setText("Order ID: " + order.getOrderId());
+        tvOrderUser.setText("User: " + order.getUserId());
 
+        String formattedDate = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
+                .format(new Date(order.getTimestamp()));
+        tvOrderDate.setText("Date: " + formattedDate);
 
-        if (order.getProductImageURL() != null && !order.getProductImageURL().isEmpty()) {
-            new ImageLoadTask(order.getProductImageURL(), imageView).execute();
-        } else {
-            imageView.setImageResource(android.R.drawable.ic_menu_report_image);
+        StringBuilder itemsBuilder = new StringBuilder();
+        double total = 0;
+
+        if (order.getItems() != null) {
+            for (String key : order.getItems().keySet()) {
+                Order.OrderItem item = order.getItems().get(key);
+
+                double subtotal = item.getPrice() * item.getQuantity();
+                total += subtotal;
+
+                itemsBuilder.append("• ")
+                        .append(item.getName())
+                        .append(" (x")
+                        .append(item.getQuantity())
+                        .append(")  — $")
+                        .append(item.getPrice())
+                        .append(" | Subtotal: $")
+                        .append(subtotal)
+                        .append("\n");
+            }
         }
+
+        tvOrderItems.setText(itemsBuilder.toString().trim());
+        tvOrderTotal.setText("Total: $" + total);
 
         return convertView;
-    }
-
-    private static class ImageLoadTask extends AsyncTask<Void,Void, Bitmap> {
-        private String url;
-        private ImageView imageView;
-        public ImageLoadTask(String url, ImageView imageView){
-            this.url = url;
-            this.imageView = imageView;
-        }
-        @Override
-        protected Bitmap doInBackground(Void... voids) {
-            try{
-                URL urlConnection = new URL(url);
-                HttpURLConnection connection = (HttpURLConnection) urlConnection.openConnection();
-                connection.setDoInput(true);
-                connection.connect();
-                InputStream input = connection.getInputStream();
-                return BitmapFactory.decodeStream(input);
-            }catch (Exception e){
-                e.printStackTrace();
-                return null;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap result) {
-            if (result != null) {
-                imageView.setImageBitmap(result);
-            }else{
-                imageView.setImageResource(android.R.drawable.ic_menu_report_image);
-            }
-        }
     }
 
 }

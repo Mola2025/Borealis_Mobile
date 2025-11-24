@@ -42,17 +42,6 @@
                 android:src="@drawable/ic_checkout"
                 />
 
-<!--           ESTE BOTON ES PARA PROBAR EL PAYMENT DESPUES MUEVALO PARA NO SE ALGO DE CHECKOUT O ALGO XD -->
-
-            <Button
-                android:id="@+id/payment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Stripe Payment"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                />
-
         </RelativeLayout>
 
     </LinearLayout>

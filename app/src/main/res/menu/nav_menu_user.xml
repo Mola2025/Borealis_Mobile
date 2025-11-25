@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_settings"
+            android:title="Edit Profile"
+            android:icon="@drawable/ic_settings" />
+<!--        <item-->
+<!--            android:id="@+id/nav_favorite_items"-->
+<!--            android:title="Favorites"-->
+<!--            android:icon="@drawable/ic_favorites_off" />-->
+        <item
+            android:id="@+id/nav_user_characters"
+            android:title="My Characters"
+            android:icon="@drawable/ic_users" />
+    </group>
+    <item
+        android:id="@+id/nav_logout"
+        android:title="Logout"
+        android:icon="@drawable/ic_logout" />
+</menu>

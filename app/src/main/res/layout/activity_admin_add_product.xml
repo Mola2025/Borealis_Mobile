@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="30dp"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Add a new Product"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            />
+
+        <EditText
+            android:id="@+id/editTextProductName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Product Name" />
+
+
+        <EditText
+            android:id="@+id/editTextProductDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Product Description" />
+
+        <EditText
+            android:id="@+id/editTextProductPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Product Price"
+            android:inputType="numberDecimal" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            />
+
+
+        <ImageView
+            android:id="@+id/imageViewProduct"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="@color/gray" />
+
+        <Button
+            android:id="@+id/buttonSelectImage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/green"
+            android:text="Select the product Image"
+            android:textColor="@color/black"
+            />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/imageButtonPremium"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@android:color/transparent"
+                android:contentDescription="Premium Item"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_crown_off" />
+
+            <TextView
+                android:id="@+id/textViewPremium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:text="Premium Item"
+                android:textColor="@android:color/black"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+        <!--  Spinner que diga type y dependiendo del type me salen los campos para que sigan llenando
+  Class / Item / Race / Spell y dependiendo de cual se elija me salen los campos correspondientes-->
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            />
+
+        <TextView
+            android:id="@+id/textViewType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Select a Type ↓↓"
+            android:textSize="16sp"/>
+
+        <Spinner
+            android:id="@+id/spinnerType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            />
+
+        <!-- CLASS -->
+        <LinearLayout
+            android:id="@+id/layoutClass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="10dp"
+            android:visibility="gone">
+
+            <EditText
+                android:id="@+id/etHitDice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Hit Dice" />
+
+            <EditText
+                android:id="@+id/etStartingGold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Starting Gold" />
+
+            <EditText
+                android:id="@+id/etProficiencies"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Proficiencies (comma separated)" />
+
+            <EditText
+                android:id="@+id/etSavingThrows"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Saving Throws (comma separated)" />
+        </LinearLayout>
+
+        <!-- RACE -->
+        <LinearLayout
+            android:id="@+id/layoutRace"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="10dp"
+            android:visibility="gone">
+
+            <EditText
+                android:id="@+id/etSize"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Size" />
+
+            <EditText
+                android:id="@+id/etSpeed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Speed"
+                android:inputType="number" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ability Scores" />
+
+            <EditText
+                android:id="@+id/etStr"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="STR"
+                android:inputType="number" />
+
+            <EditText
+                android:id="@+id/etDex"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="DEX"
+                android:inputType="number" />
+
+            <EditText
+                android:id="@+id/etCon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="CON"
+                android:inputType="number" />
+
+            <EditText
+                android:id="@+id/etInt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="INT"
+                android:inputType="number" />
+
+            <EditText
+                android:id="@+id/etWis"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="WIS"
+                android:inputType="number" />
+
+            <EditText
+                android:id="@+id/etCha"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="CHA"
+                android:inputType="number" />
+
+<!--            <EditText-->
+<!--                android:id="@+id/etRacialTraits"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:hint="Racial Traits (comma separated)" />-->
+        </LinearLayout>
+
+        <!-- ITEM -->
+        <LinearLayout
+            android:id="@+id/layoutItem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="10dp"
+            android:visibility="gone">
+
+            <EditText
+                android:id="@+id/etCategory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Category" />
+
+            <EditText
+                android:id="@+id/etSlot"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Slot" />
+
+            <EditText
+                android:id="@+id/etCost"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Cost" />
+
+            <EditText
+                android:id="@+id/etWeight"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Weight" />
+
+            <EditText
+                android:id="@+id/etArmorClass"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Armor Class" />
+
+            <EditText
+                android:id="@+id/etStrengthReq"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Strength Requirement" />
+
+        </LinearLayout>
+
+        <!-- SPELL -->
+        <LinearLayout
+            android:id="@+id/layoutSpell"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="10dp"
+            android:visibility="gone">
+
+            <EditText
+                android:id="@+id/etLevel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Level"
+                android:inputType="number" />
+
+            <EditText
+                android:id="@+id/etSchool"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="School" />
+
+            <EditText
+                android:id="@+id/etCastTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Cast Time" />
+
+            <EditText
+                android:id="@+id/etRange"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Range" />
+
+            <EditText
+                android:id="@+id/etComponents"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Components" />
+
+            <EditText
+                android:id="@+id/etDuration"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Duration" />
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/buttonSaveProduct"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/green"
+            android:text="Save Product" />
+
+
+    </LinearLayout>
+</ScrollView>

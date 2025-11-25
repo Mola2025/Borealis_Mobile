@@ -1,0 +1,293 @@
+{
+  "class-barbarian": {
+    "type": "Class",
+    "id": "class-barbarian",
+    "name": "Barbarian",
+    "source": "PHB",
+    "description": "A fierce warrior of primitive background who can enter a battle rage.",
+    "hitDice": "d12",
+    "startingGold": "2d4 x 10 gp",
+    "proficiencies": ["Light Armor", "Medium Armor", "Shields", "Simple Weapons", "Martial Weapons"],
+    "saveProficiencies": ["Strength", "Constitution"]
+  },
+  "class-bard": {
+    "type": "Class",
+    "id": "class-bard",
+    "name": "Bard",
+    "source": "PHB",
+    "description": "An inspiring magician whose power echoes the music of creation.",
+    "hitDice": "d8",
+    "startingGold": "5d4 x 10 gp",
+    "proficiencies": ["Light Armor", "Simple Weapons", "Hand Crossbows", "Longswords", "Rapiers", "Shortswords", "Three musical instruments"],
+    "saveProficiencies": ["Dexterity", "Charisma"]
+  },
+  "class-cleric": {
+    "type": "Class",
+    "id": "class-cleric",
+    "name": "Cleric",
+    "source": "PHB",
+    "description": "A priestly champion who wields divine magic in service of a higher power.",
+    "hitDice": "d8",
+    "startingGold": "5d4 x 10 gp",
+    "proficiencies": ["Light Armor", "Medium Armor", "Shields", "Simple Weapons"],
+    "saveProficiencies": ["Wisdom", "Charisma"]
+  },
+  "class-druid": {
+    "type": "Class",
+    "id": "class-druid",
+    "name": "Druid",
+    "source": "PHB",
+    "description": "A priest of the Old Faith, wielding the powers of nature.",
+    "hitDice": "d8",
+    "startingGold": "2d4 x 10 gp",
+    "proficiencies": ["Light Armor", "Medium Armor", "Shields", "Clubs", "Daggers", "Darts", "Javelins", "Maces", "Quarterstaffs", "Scimitars", "Sickles", "Slings", "Spears", "Herbalism Kit"],
+    "saveProficiencies": ["Intelligence", "Wisdom"]
+  },
+  "class-fighter": {
+    "type": "Class",
+    "id": "class-fighter",
+    "name": "Fighter",
+    "source": "PHB",
+    "description": "A master of martial combat, skilled with a variety of weapons and armor.",
+    "hitDice": "d10",
+    "startingGold": "5d4 x 10 gp",
+    "proficiencies": ["All Armor", "Shields", "Simple Weapons", "Martial Weapons"],
+    "saveProficiencies": ["Strength", "Constitution"]
+  },
+  "class-monk": {
+    "type": "Class",
+    "id": "class-monk",
+    "name": "Monk",
+    "source": "PHB",
+    "description": "A master of martial arts, harnessing the power of the body in pursuit of physical and spiritual perfection.",
+    "hitDice": "d8",
+    "startingGold": "5d4 gp",
+    "proficiencies": ["Simple Weapons", "Shortswords", "One type of artisan's tools or one musical instrument"],
+    "saveProficiencies": ["Strength", "Dexterity"]
+  },
+  "class-paladin": {
+    "type": "Class",
+    "id": "class-paladin",
+    "name": "Paladin",
+    "source": "PHB",
+    "description": "A holy warrior bound to a sacred oath.",
+    "hitDice": "d10",
+    "startingGold": "5d4 x 10 gp",
+    "proficiencies": ["All Armor", "Shields", "Simple Weapons", "Martial Weapons"],
+    "saveProficiencies": ["Wisdom", "Charisma"]
+  },
+  "class-ranger": {
+    "type": "Class",
+    "id": "class-ranger",
+    "name": "Ranger",
+    "source": "PHB",
+    "description": "A warrior who uses martial prowess and nature magic to combat threats on the edges of civilization.",
+    "hitDice": "d10",
+    "startingGold": "5d4 x 10 gp",
+    "proficiencies": ["Light Armor", "Medium Armor", "Shields", "Simple Weapons", "Martial Weapons"],
+    "saveProficiencies": ["Strength", "Dexterity"]
+  },
+  "class-rogue": {
+    "type": "Class",
+    "id": "class-rogue",
+    "name": "Rogue",
+    "source": "PHB",
+    "description": "A scoundrel who uses stealth and trickery to overcome obstacles and enemies.",
+    "hitDice": "d8",
+    "startingGold": "4d4 x 10 gp",
+    "proficiencies": ["Light Armor", "Simple Weapons", "Hand Crossbows", "Longswords", "Rapiers", "Shortswords", "Thieves' Tools"],
+    "saveProficiencies": ["Dexterity", "Intelligence"]
+  },
+  "class-sorcerer": {
+    "type": "Class",
+    "id": "class-sorcerer",
+    "name": "Sorcerer",
+    "source": "PHB",
+    "description": "A spellcaster who draws on inherent magic from a gift or bloodline.",
+    "hitDice": "d6",
+    "startingGold": "3d4 x 10 gp",
+    "proficiencies": ["Daggers", "Darts", "Slings", "Quarterstaffs", "Light Crossbows"],
+    "saveProficiencies": ["Constitution", "Charisma"]
+  },
+  "class-warlock": {
+    "type": "Class",
+    "id": "class-warlock",
+    "name": "Warlock",
+    "source": "PHB",
+    "description": "A wielder of magic that is derived from a bargain with an extraplanar entity.",
+    "hitDice": "d8",
+    "startingGold": "4d4 x 10 gp",
+    "proficiencies": ["Light Armor", "Simple Weapons"],
+    "saveProficiencies": ["Wisdom", "Charisma"]
+  },
+  "class-wizard": {
+    "type": "Class",
+    "id": "class-wizard",
+    "name": "Wizard",
+    "source": "PHB",
+    "description": "A scholarly magic-user capable of manipulating the structures of reality.",
+    "hitDice": "d6",
+    "startingGold": "4d4 x 10 gp",
+    "proficiencies": ["Daggers", "Darts", "Slings", "Quarterstaffs", "Light Crossbows"],
+    "saveProficiencies": ["Intelligence", "Wisdom"]
+  },
+  "race-dwarf": {
+    "type": "Race",
+    "id": "race-dwarf",
+    "name": "Dwarf",
+    "source": "PHB",
+    "description": "Stout and hearty, dwarves are known for their skill in metalwork and resilience.",
+    "abilityScoreIncreases": {
+      "Constitution": 2
+    },
+    "speed": 25,
+    "size": "Medium"
+  },
+  "race-elf": {
+    "type": "Race",
+    "id": "race-elf",
+    "name": "Elf",
+    "source": "PHB",
+    "description": "Graceful and long-lived, elves are tied to the ancient forests and are masters of archery.",
+    "abilityScoreIncreases": {
+      "Dexterity": 2
+    },
+    "speed": 30,
+    "size": "Medium"
+  },
+  "spell-firebolt": {
+    "type": "Spell",
+    "id": "spell-firebolt",
+    "name": "Fire Bolt",
+    "source": "PHB",
+    "level": 0,
+    "school": "Evocation",
+    "castingTime": "1 Action",
+    "range": "120 feet",
+    "duration": "Instantaneous",
+    "components": "V, S",
+    "description": "Hurl a mote of fire at a creature or object."
+  },
+  "spell-curewounds": {
+    "type": "Spell",
+    "id": "spell-curewounds",
+    "name": "Cure Wounds",
+    "source": "PHB",
+    "level": 1,
+    "school": "Abjuration",
+    "castingTime": "1 Action",
+    "range": "Touch",
+    "duration": "Instantaneous",
+    "components": "V, S",
+    "description": "A creature you touch regains a number of hit points equal to 1d8 + your spellcasting ability modifier."
+  },
+  "spell-magearmor": {
+    "type": "Spell",
+    "id": "spell-magearmor",
+    "name": "Mage Armor",
+    "source": "PHB",
+    "level": 1,
+    "school": "Abjuration",
+    "castingTime": "1 Action",
+    "range": "Touch",
+    "duration": "8 Hours",
+    "components": "V, S, M",
+    "description": "A protective magical force surrounds a creature you touch, granting it a +3 bonus to AC."
+  },
+  "item-leatherarmor": {
+    "type": "Armor",
+    "id": "item-leatherarmor",
+    "name": "Leather Armor",
+    "source": "PHB",
+    "description": "The lightest form of armor.",
+    "armorClass": 11,
+    "weight": 10,
+    "cost": 10
+  },
+  "item-chainmail": {
+    "type": "Armor",
+    "id": "item-chainmail",
+    "name": "Chain Mail",
+    "source": "PHB",
+    "description": "A suit of interlocking metal rings.",
+    "armorClass": 16,
+    "weight": 55,
+    "cost": 50
+  },
+  "item-shield": {
+    "type": "Armor",
+    "id": "item-shield",
+    "name": "Shield",
+    "source": "PHB",
+    "description": "A piece of equipment held in one hand.",
+    "armorClass": 2,
+    "weight": 6,
+    "cost": 10
+  },
+  "item-longsword": {
+    "type": "Weapon",
+    "id": "item-longsword",
+    "name": "Longsword",
+    "source": "PHB",
+    "description": "Versatile martial melee weapon.",
+    "damage": "1d8 slashing",
+    "weight": 3,
+    "cost": 15
+  },
+  "item-lightcrossbow": {
+    "type": "Weapon",
+    "id": "item-lightcrossbow",
+    "name": "Light Crossbow",
+    "source": "PHB",
+    "description": "Two-handed ranged weapon.",
+    "damage": "1d8 piercing",
+    "weight": 5,
+    "cost": 35
+  },
+  "item-dagger": {
+    "type": "Weapon",
+    "id": "item-dagger",
+    "name": "Dagger",
+    "source": "PHB",
+    "description": "Finesse, light, thrown weapon.",
+    "damage": "1d4 piercing",
+    "weight": 1,
+    "cost": 2
+  },
+  "item-potofhealing": {
+    "type": "Magic Item",
+    "id": "item-potofhealing",
+    "name": "Potion of Healing",
+    "source": "DMG",
+    "description": "Restores 2d4 + 2 hit points.",
+    "rarity": "Common",
+    "cost": 50
+  },
+  "item-cloakofinvis": {
+    "type": "Magic Item",
+    "id": "item-cloakofinvis",
+    "name": "Cloak of Invisibility",
+    "source": "DMG",
+    "description": "Makes the wearer invisible when the hood is drawn.",
+    "rarity": "Legendary",
+    "attunement": true
+  },
+  "item-rope": {
+    "type": "Item",
+    "id": "item-rope",
+    "name": "Hempen Rope (50 ft.)",
+    "source": "PHB",
+    "description": "Standard 50 feet of hempen rope.",
+    "weight": 10,
+    "cost": 1
+  },
+  "item-rations": {
+    "type": "Item",
+    "id": "item-rations",
+    "name": "Rations (1 day)",
+    "source": "PHB",
+    "description": "Dry food that can sustain one person for a day.",
+    "weight": 2,
+    "cost": 0.5
+  }
+}

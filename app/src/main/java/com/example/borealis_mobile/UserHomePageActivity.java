@@ -168,7 +168,7 @@ public class UserHomePageActivity extends AppCompatActivity
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     String username = snapshot.child("username").getValue(String.class);
-                    String profileImage = snapshot.child("imageURL").getValue(String.class);
+                    String profileImage = snapshot.child("profileImageURL").getValue(String.class);
 
                     if (username != null) {
                         UserHomePageActivity.this.username.setText(username);
